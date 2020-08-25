@@ -61,6 +61,7 @@
 #include "exec/memory-internal.h"
 #include "exec/ram_addr.h"
 #include "exec/log.h"
+#include "exec/keepalive.h"
 
 #include "qemu/pmem.h"
 
@@ -2430,6 +2431,31 @@ ram_addr_t qemu_ram_addr_from_host(void *ptr)
     }
 
     return block->offset + offset;
+}
+
+static bool keepalive_enabled;
+
+void qemu_set_keepalive(bool on, void *data, Error **errp)
+{
+    if (keepalive_enabled == on) {
+        return;
+    }
+
+    keepalive_enabled = on;
+}
+
+static QemuOptsList qemu_keepalive_opts = {
+    .name = "keepalive",
+    .implied_opt_name = "action",
+    .head = QTAILQ_HEAD_INITIALIZER(qemu_keepalive_opts.head),
+    .desc = {
+        { /* end of list */ }
+    },
+};
+
+void qemu_keepalive_init(void)
+{
+    qemu_add_opts(&qemu_keepalive_opts);
 }
 
 static MemTxResult flatview_read(FlatView *fv, hwaddr addr,

@@ -1954,3 +1954,13 @@
   'data': { 'job-id': 'str',
             'tag': 'str',
             'devices': ['str'] } }
+
+##
+# @set-keepalive:
+#
+# set or clear keepalive flag for VMM Fast Restart
+#
+# Since: 6.2
+##
+{ 'command': 'set-keepalive', 'data': {'action': 'str',
+                                   'token': 'str'} }

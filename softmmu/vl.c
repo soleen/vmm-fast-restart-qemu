@@ -125,6 +125,7 @@
 #include "qapi/qmp/qerror.h"
 #include "sysemu/iothread.h"
 #include "qemu/guest-random.h"
+#include "exec/keepalive.h"
 
 #define MAX_VIRTIO_CONSOLES 1
 
@@ -2572,6 +2573,7 @@ static void qemu_init_board(void)
 
     /* From here on we enter MACHINE_PHASE_INITIALIZED.  */
     machine_run_board_init(current_machine);
+    qemu_keepalive_init();
 
     drive_check_orphaned();
 
